@@ -523,8 +523,8 @@ function cargarEjemplo(){
   document.getElementById("anio").value = "2026";
   document.getElementById("tipoDec").value = "IND";
   document.getElementById("tipoIdent").value = "R";
-  document.getElementById("numIdent").value = "";
-  document.getElementById("nombre").value = "";
+  document.getElementById("numIdent").value = "0909042681001";
+  document.getElementById("nombre").value = "QUIROZ PESANTES ALEXANDRA MARIA DEL CARMEN";
   document.getElementById("totalDeclarado").value = "1003000.00";
   document.getElementById("atribuibleHijos").value = "0.00";
   document.getElementById("sociedadConyugal").value = "0.00";
@@ -536,11 +536,121 @@ function cargarEjemplo(){
   document.querySelector("#tablaInmuebles tbody").innerHTML = "";
   document.querySelector("#tablaPasivos tbody").innerHTML = "";
 
-  agregarDinero({tipoInversion:"4", ifiEcuador:"1006", saldo:"40000.00"});
-  agregarDinero({tipoInversion:"2", ifiEcuador:"4178", saldo:"120000.00"});
-  agregarVehiculo({placa:"", valor:"15000.00"});
-  agregarInmueble({provincia:"109", canton:"10901", fechaInscripcion:"30/06/2022", claveCat:"", valor:"400000.00"});
-  agregarPasivo({nombreAcreedor:"BANCO PICHINCHA", tipoIdentificacionAcreedor:"R", numeroIdentificacionAcreedor:"1790010937001", valorDeuda:"5000.00"});
+  agregarDinero({
+    dineroEn:"IFI",
+    tipoInversion:"4",
+    ubicacion:"ECU",
+    pais:"593",
+    ifiEcuador:"1006",
+    tipoMoneda:"DOLARES",
+    saldo:"40000.00",
+    partesRelacionadas:"2"
+  });
+
+  agregarDinero({
+    dineroEn:"IFI",
+    tipoInversion:"4",
+    ubicacion:"ECU",
+    pais:"593",
+    ifiEcuador:"1029",
+    tipoMoneda:"DOLARES",
+    saldo:"10000.00",
+    partesRelacionadas:"2"
+  });
+
+  agregarDinero({
+    dineroEn:"IFI",
+    tipoInversion:"4",
+    ubicacion:"ECU",
+    pais:"593",
+    ifiEcuador:"1007",
+    tipoMoneda:"DOLARES",
+    saldo:"40000.00",
+    partesRelacionadas:"2"
+  });
+
+  agregarDinero({
+    dineroEn:"IFI",
+    tipoInversion:"2",
+    ubicacion:"ECU",
+    pais:"593",
+    ifiEcuador:"4178",
+    tipoMoneda:"DOLARES",
+    saldo:"120000.00",
+    partesRelacionadas:"2"
+  });
+
+  agregarDinero({
+    dineroEn:"IFI",
+    tipoInversion:"2",
+    ubicacion:"ECU",
+    pais:"593",
+    ifiEcuador:"1006",
+    tipoMoneda:"DOLARES",
+    saldo:"200000.00",
+    partesRelacionadas:"2"
+  });
+
+  agregarDinero({
+    dineroEn:"IFI",
+    tipoInversion:"2",
+    ubicacion:"ECU",
+    pais:"593",
+    ifiEcuador:"1029",
+    tipoMoneda:"DOLARES",
+    saldo:"20000.00",
+    partesRelacionadas:"2"
+  });
+
+  agregarDinero({
+    dineroEn:"IFI",
+    tipoInversion:"2",
+    ubicacion:"ECU",
+    pais:"593",
+    ifiEcuador:"1033",
+    tipoMoneda:"DOLARES",
+    saldo:"132000.00",
+    partesRelacionadas:"2"
+  });
+
+  agregarVehiculo({
+    tipoVehiculo:"1",
+    placa:"GSW3639",
+    ubicacion:"ECU",
+    pais:"593",
+    valor:"15000.00"
+  });
+
+  agregarVehiculo({
+    tipoVehiculo:"1",
+    placa:"GTS8269",
+    ubicacion:"ECU",
+    pais:"593",
+    valor:"31000.00"
+  });
+
+  agregarInmueble({
+    tipoInmueble:"1",
+    ubicacion:"ECU",
+    codPais:"593",
+    provincia:"109",
+    canton:"10901",
+    fechaInscripcion:"30/06/2022",
+    claveCat:"81181600000",
+    valor:"400000.00"
+  });
+
+  agregarPasivo({
+    tipoAcreedor:"IFI",
+    domicilioAcreedor:"ECU",
+    valorDeuda:"5000.00",
+    paisAcreedor:"593",
+    nombreAcreedor:"BANCO PICHINCHA",
+    tipoIdentificacionAcreedor:"R",
+    numeroIdentificacionAcreedor:"1790010937001",
+    partesRelacionadas:"2"
+  });
+
   generarXML(false);
 }
 
@@ -567,3 +677,4 @@ agregarPasivo();
 </script>
 </body>
 </html>
+
