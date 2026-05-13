@@ -1,1 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador XML Declaración Patrimonial</title>
+  <style>
+    :root{
+      --bg:#f4f6f9;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --primary:#1d4ed8;
+      --primary-dark:#1e40af;
+      --danger:#dc2626;
+      --border:#d1d5db;
+    }
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    header{
+      background:var(--primary);
+      color:white;
+      padding:18px;
+      text-align:center;
+    }
+    main{
+      max-width:1100px;
+      margin:20px auto;
+      padding:0 14px 40px;
+    }
+    .card{
+      background:var(--card);
+      border-radius:14px;
+      padding:18px;
+      margin-bottom:18px;
+      box-shadow:0 4px 14px rgba(0,0,0,.08);
+    }
+    h2{
+      margin-top:0;
+      font-size:20px;
+      color:var(--primary-dark);
+      border-bottom:1px solid var(--border);
+      padding-bottom:8px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    label{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:bold;
+    }
+    input, select{
+      width:100%;
+      box-sizing:border-box;
+      margin-top:5px;
+      padding:10px;
+      border:1px solid var(--border);
+      border-radius:9px;
+      font-size:15px;
+      background:white;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+      font-size:14px;
+    }
+    th,td{
+      border:1px solid var(--border);
+      padding:8px;
+      vertical-align:top;
+    }
+    th{
+      background:#eef2ff;
+      color:#1e3a8a;
+    }
+    td input, td select{
+      margin:0;
+      padding:8px;
+      font-size:14px;
+    }
+    button{
+      border:0;
+      border-radius:10px;
+      padding:11px 14px;
+      font-size:15px;
+      cursor:pointer;
+      font-weight:bold;
+      margin:6px 6px 0 0;
+    }
+    .btn-primary{
+      background:var(--primary);
+      color:white;
+    }
+    .btn-primary:hover{
+      background:var(--primary-dark);
+    }
+    .btn-secondary{
+      background:#e5e7eb;
+      color:#111827;
+    }
+    .btn-danger{
+      background:var(--danger);
+      color:white;
+      padding:8px 10px;
+      font-size:13px;
+    }
+    .actions{
+      position:sticky;
+      bottom:0;
+      background:rgba(244,246,249,.95);
+      padding:14px;
+      border-top:1px solid var(--border);
+      text-align:center;
+    }
+    .note{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.4;
+    }
+    textarea{
+      width:100%;
+      min-height:220px;
+      box-sizing:border-box;
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:12px;
+      font-family: Consolas, monospace;
+      font-size:13px;
+      white-space:pre;
+    }
+    @media(max-width:800px){
+      .grid{grid-template-columns:1fr;}
+      table{font-size:12px;}
+      th,td{padding:5px;}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Generador XML - Declaración Patrimonial</h1>
+  <div>Llena los campos y descarga tu archivo XML</div>
+</header>
 
+<main>
+  <section class="card">
+    <h2>1. Datos generales</h2>
+    <div class="grid">
+      <div>
+        <label>Año</label>
+        <input id="anio" value="2026">
+      </div>
+      <div>
+        <label>Tipo Declaración</label>
+        <select id="tipoDec">
+          <option value="IND">IND - Individual</option>
+        </select>
+      </div>
+      <div>
+        <label>Tipo Identificación</label>
+        <select id="tipoIdent">
+          <option value="R">R - RUC</option>
+          <option value="C">C - Cédula</option>
+          <option value="P">P - Pasaporte</option>
+        </select>
+      </div>
+      <div>
+        <label>Número Identificación</label>
+        <input id="numIdent" placeholder="Ej: 0909042681001">
+      </div>
+      <div style="grid-column:span 2">
+        <label>Nombre completo</label>
+        <input id="nombre" placeholder="Apellidos y nombres">
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>2. Patrimonio</h2>
+    <div class="grid">
+      <div>
+        <label>Total declarado</label>
+        <input id="totalDeclarado" type="number" step="0.01" value="0.00">
+      </div>
+      <div>
+        <label>Atribuible hijos</label>
+        <input id="atribuibleHijos" type="number" step="0.01" value="0.00">
+      </div>
+      <div>
+        <label>Sociedad conyugal</label>
+        <input id="sociedadConyugal" type="number" step="0.01" value="0.00">
+      </div>
+      <div>
+        <label>Individual</label>
+        <input id="individual" type="number" step="0.01" value="0.00">
+      </div>
+      <div>
+        <label>Año anterior</label>
+        <input id="anioAnterior" type="number" step="0.01" value="0.00">
+      </div>
+    </div>
+    <button class="btn-secondary" onclick="calcularIndividual()">Calcular individual = total - hijos - sociedad</button>
+  </section>
+
+  <section class="card">
+    <h2>3. Dinero / inversiones</h2>
+    <p class="note">IFI = Institución financiera. País Ecuador normalmente es 593. Partes relacionadas: 2 normalmente significa No.</p>
+    <button class="btn-secondary" onclick="agregarDinero()">+ Agregar dinero</button>
+    <table id="tablaDinero">
+      <thead>
+        <tr>
+          <th>Dinero en</th>
+          <th>Tipo inversión</th>
+          <th>Ubicación</th>
+          <th>País</th>
+          <th>IFI Ecuador</th>
+          <th>Moneda</th>
+          <th>Saldo</th>
+          <th>Partes rel.</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>4. Vehículos</h2>
+    <button class="btn-secondary" onclick="agregarVehiculo()">+ Agregar vehículo</button>
+    <table id="tablaVehiculos">
+      <thead>
+        <tr>
+          <th>Tipo vehículo</th>
+          <th>Placa</th>
+          <th>Ubicación</th>
+          <th>País</th>
+          <th>Valor</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>5. Bienes inmuebles</h2>
+    <button class="btn-secondary" onclick="agregarInmueble()">+ Agregar inmueble</button>
+    <table id="tablaInmuebles">
+      <thead>
+        <tr>
+          <th>Tipo inmueble</th>
+          <th>Ubicación</th>
+          <th>Cód. país</th>
+          <th>Provincia</th>
+          <th>Cantón</th>
+          <th>Fecha inscripción</th>
+          <th>Clave catastral</th>
+          <th>Valor</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>6. Pasivos / deudas</h2>
+    <button class="btn-secondary" onclick="agregarPasivo()">+ Agregar pasivo</button>
+    <table id="tablaPasivos">
+      <thead>
+        <tr>
+          <th>Tipo acreedor</th>
+          <th>Domicilio</th>
+          <th>Valor deuda</th>
+          <th>País</th>
+          <th>Nombre acreedor</th>
+          <th>Tipo ID</th>
+          <th>Número ID</th>
+          <th>Partes rel.</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Vista previa XML</h2>
+    <textarea id="preview" readonly></textarea>
+  </section>
+</main>
+
+<div class="actions">
+  <button class="btn-primary" onclick="generarXML(true)">Generar y descargar XML</button>
+  <button class="btn-secondary" onclick="generarXML(false)">Solo ver vista previa</button>
+  <button class="btn-secondary" onclick="cargarEjemplo()">Cargar ejemplo</button>
+  <button class="btn-secondary" onclick="limpiarTodo()">Limpiar</button>
+</div>
+
+<script>
+function money(v){
+  const n = parseFloat(v || 0);
+  return n.toFixed(2);
+}
+
+function esc(v){
+  return String(v ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&apos;");
+}
+
+function inputCell(value="", type="text"){
+  return `<input type="${type}" value="${esc(value)}">`;
+}
+
+function selectCell(options, value){
+  let html = `<select>`;
+  options.forEach(o => {
+    const selected = o.value === value ? "selected" : "";
+    html += `<option value="${esc(o.value)}" ${selected}>${esc(o.text)}</option>`;
+  });
+  html += `</select>`;
+  return html;
+}
+
+function deleteButton(){
+  return `<button class="btn-danger" onclick="this.closest('tr').remove()">Borrar</button>`;
+}
+
+function agregarDinero(data={}){
+  const tbody = document.querySelector("#tablaDinero tbody");
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${inputCell(data.dineroEn || "IFI")}</td>
+    <td>${inputCell(data.tipoInversion || "4")}</td>
+    <td>${inputCell(data.ubicacion || "ECU")}</td>
+    <td>${inputCell(data.pais || "593")}</td>
+    <td>${inputCell(data.ifiEcuador || "")}</td>
+    <td>${inputCell(data.tipoMoneda || "DOLARES")}</td>
+    <td>${inputCell(data.saldo || "0.00", "number")}</td>
+    <td>${inputCell(data.partesRelacionadas || "2")}</td>
+    <td>${deleteButton()}</td>`;
+  tbody.appendChild(tr);
+}
+
+function agregarVehiculo(data={}){
+  const tbody = document.querySelector("#tablaVehiculos tbody");
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${inputCell(data.tipoVehiculo || "1")}</td>
+    <td>${inputCell(data.placa || "")}</td>
+    <td>${inputCell(data.ubicacion || "ECU")}</td>
+    <td>${inputCell(data.pais || "593")}</td>
+    <td>${inputCell(data.valor || "0.00", "number")}</td>
+    <td>${deleteButton()}</td>`;
+  tbody.appendChild(tr);
+}
+
+function agregarInmueble(data={}){
+  const tbody = document.querySelector("#tablaInmuebles tbody");
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${inputCell(data.tipoInmueble || "1")}</td>
+    <td>${inputCell(data.ubicacion || "ECU")}</td>
+    <td>${inputCell(data.codPais || "593")}</td>
+    <td>${inputCell(data.provincia || "")}</td>
+    <td>${inputCell(data.canton || "")}</td>
+    <td>${inputCell(data.fechaInscripcion || "", "text")}</td>
+    <td>${inputCell(data.claveCat || "")}</td>
+    <td>${inputCell(data.valor || "0.00", "number")}</td>
+    <td>${deleteButton()}</td>`;
+  tbody.appendChild(tr);
+}
+
+function agregarPasivo(data={}){
+  const tbody = document.querySelector("#tablaPasivos tbody");
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${inputCell(data.tipoAcreedor || "IFI")}</td>
+    <td>${inputCell(data.domicilioAcreedor || "ECU")}</td>
+    <td>${inputCell(data.valorDeuda || "0.00", "number")}</td>
+    <td>${inputCell(data.paisAcreedor || "593")}</td>
+    <td>${inputCell(data.nombreAcreedor || "")}</td>
+    <td>${inputCell(data.tipoIdentificacionAcreedor || "R")}</td>
+    <td>${inputCell(data.numeroIdentificacionAcreedor || "")}</td>
+    <td>${inputCell(data.partesRelacionadas || "2")}</td>
+    <td>${deleteButton()}</td>`;
+  tbody.appendChild(tr);
+}
+
+function getRowValues(selector){
+  return [...document.querySelectorAll(selector + " tbody tr")].map(tr =>
+    [...tr.querySelectorAll("input, select")].map(i => i.value.trim())
+  );
+}
+
+function calcularIndividual(){
+  const total = parseFloat(document.getElementById("totalDeclarado").value || 0);
+  const hijos = parseFloat(document.getElementById("atribuibleHijos").value || 0);
+  const sociedad = parseFloat(document.getElementById("sociedadConyugal").value || 0);
+  document.getElementById("individual").value = (total - hijos - sociedad).toFixed(2);
+}
+
+function generarXML(descargar){
+  const anio = document.getElementById("anio").value.trim();
+  const tipoDec = document.getElementById("tipoDec").value.trim();
+  const tipoIdent = document.getElementById("tipoIdent").value.trim();
+  const numIdent = document.getElementById("numIdent").value.trim();
+  const nombre = document.getElementById("nombre").value.trim();
+
+  let xml = `<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>\n`;
+  xml += `<decPat>\n`;
+  xml += `    <anio>${esc(anio)}</anio>\n`;
+  xml += `    <tipoDec>${esc(tipoDec)}</tipoDec>\n`;
+  xml += `    <tipoIdent>${esc(tipoIdent)}</tipoIdent>\n`;
+  xml += `    <numIdent>${esc(numIdent)}</numIdent>\n`;
+  xml += `    <nombre>${esc(nombre)}</nombre>\n`;
+  xml += `    <patrimonio>\n`;
+  xml += `        <totalDeclarado>${money(document.getElementById("totalDeclarado").value)}</totalDeclarado>\n`;
+  xml += `        <atribuibleHijos>${money(document.getElementById("atribuibleHijos").value)}</atribuibleHijos>\n`;
+  xml += `        <sociedadConyugal>${money(document.getElementById("sociedadConyugal").value)}</sociedadConyugal>\n`;
+  xml += `        <individual>${money(document.getElementById("individual").value)}</individual>\n`;
+  xml += `        <anioAnterior>${money(document.getElementById("anioAnterior").value)}</anioAnterior>\n`;
+  xml += `    </patrimonio>`;
+
+  const dinero = getRowValues("#tablaDinero");
+  if(dinero.length){
+    xml += `<dinero>\n`;
+    dinero.forEach(r => {
+      xml += `<detalleDinero>\n`;
+      xml += `    <dineroEn>${esc(r[0])}</dineroEn>\n`;
+      xml += `    <tipoInversion>${esc(r[1])}</tipoInversion>\n`;
+      xml += `    <ubicacion>${esc(r[2])}</ubicacion>\n`;
+      xml += `    <pais>${esc(r[3])}</pais>\n`;
+      xml += `    <ifiEcuador>${esc(r[4])}</ifiEcuador>\n`;
+      xml += `    <tipoMoneda>${esc(r[5])}</tipoMoneda>\n`;
+      xml += `    <saldo>${money(r[6])}</saldo>\n`;
+      xml += `    <partesRelacionadas>${esc(r[7])}</partesRelacionadas>\n`;
+      xml += `</detalleDinero>\n\n`;
+    });
+    xml += `</dinero>`;
+  }
+
+  const vehiculos = getRowValues("#tablaVehiculos");
+  if(vehiculos.length){
+    xml += `<vehiculos>\n`;
+    vehiculos.forEach(r => {
+      xml += `<detalleVehiculos>\n`;
+      xml += `    <tipoVehiculo>${esc(r[0])}</tipoVehiculo>\n`;
+      xml += `    <placa>${esc(r[1])}</placa>\n`;
+      xml += `    <ubicacion>${esc(r[2])}</ubicacion>\n`;
+      xml += `    <pais>${esc(r[3])}</pais>\n`;
+      xml += `    <valor>${money(r[4])}</valor>\n`;
+      xml += `</detalleVehiculos>\n\n`;
+    });
+    xml += `</vehiculos>`;
+  }
+
+  const inmuebles = getRowValues("#tablaInmuebles");
+  if(inmuebles.length){
+    xml += `<bienesInmuebles>\n`;
+    inmuebles.forEach(r => {
+      xml += `<detalleBienesInmuebles>\n`;
+      xml += `    <tipoInmueble>${esc(r[0])}</tipoInmueble>\n`;
+      xml += `    <ubicacion>${esc(r[1])}</ubicacion>\n`;
+      xml += `    <codPais>${esc(r[2])}</codPais>\n`;
+      xml += `    <provincia>${esc(r[3])}</provincia>\n`;
+      xml += `    <canton>${esc(r[4])}</canton>\n`;
+      xml += `    <fechaInscripcion>${esc(r[5])}</fechaInscripcion>\n`;
+      xml += `    <claveCat>${esc(r[6])}</claveCat>\n`;
+      xml += `    <valor>${money(r[7])}</valor>\n`;
+      xml += `</detalleBienesInmuebles>\n\n`;
+    });
+    xml += `</bienesInmuebles>`;
+  }
+
+  const pasivos = getRowValues("#tablaPasivos");
+  if(pasivos.length){
+    xml += `<pasivo>\n`;
+    pasivos.forEach(r => {
+      xml += `<detallePasivo>\n`;
+      xml += `    <tipoAcreedor>${esc(r[0])}</tipoAcreedor>\n`;
+      xml += `    <domicilioAcreedor>${esc(r[1])}</domicilioAcreedor>\n`;
+      xml += `    <valorDeuda>${money(r[2])}</valorDeuda>\n`;
+      xml += `    <paisAcreedor>${esc(r[3])}</paisAcreedor>\n`;
+      xml += `    <nombreAcreedor>${esc(r[4])}</nombreAcreedor>\n`;
+      xml += `    <tipoIdentificacionAcreedor>${esc(r[5])}</tipoIdentificacionAcreedor>\n`;
+      xml += `    <numeroIdentificacionAcreedor>${esc(r[6])}</numeroIdentificacionAcreedor>\n`;
+      xml += `    <partesRelacionadas>${esc(r[7])}</partesRelacionadas>\n`;
+      xml += `</detallePasivo>\n`;
+    });
+    xml += `</pasivo>`;
+  }
+
+  xml += `</decPat>`;
+
+  document.getElementById("preview").value = xml;
+
+  if(descargar){
+    const blob = new Blob([xml], {type: "application/xml;charset=ISO-8859-1"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `DP${anio || "2026"}.xml`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+}
+
+function cargarEjemplo(){
+  document.getElementById("anio").value = "2026";
+  document.getElementById("tipoDec").value = "IND";
+  document.getElementById("tipoIdent").value = "R";
+  document.getElementById("numIdent").value = "";
+  document.getElementById("nombre").value = "";
+  document.getElementById("totalDeclarado").value = "1003000.00";
+  document.getElementById("atribuibleHijos").value = "0.00";
+  document.getElementById("sociedadConyugal").value = "0.00";
+  document.getElementById("individual").value = "1003000.00";
+  document.getElementById("anioAnterior").value = "1003000.00";
+
+  document.querySelector("#tablaDinero tbody").innerHTML = "";
+  document.querySelector("#tablaVehiculos tbody").innerHTML = "";
+  document.querySelector("#tablaInmuebles tbody").innerHTML = "";
+  document.querySelector("#tablaPasivos tbody").innerHTML = "";
+
+  agregarDinero({tipoInversion:"4", ifiEcuador:"1006", saldo:"40000.00"});
+  agregarDinero({tipoInversion:"2", ifiEcuador:"4178", saldo:"120000.00"});
+  agregarVehiculo({placa:"", valor:"15000.00"});
+  agregarInmueble({provincia:"109", canton:"10901", fechaInscripcion:"30/06/2022", claveCat:"", valor:"400000.00"});
+  agregarPasivo({nombreAcreedor:"BANCO PICHINCHA", tipoIdentificacionAcreedor:"R", numeroIdentificacionAcreedor:"1790010937001", valorDeuda:"5000.00"});
+  generarXML(false);
+}
+
+function limpiarTodo(){
+  document.querySelectorAll("input").forEach(i => {
+    if(i.type === "number") i.value = "0.00";
+    else i.value = "";
+  });
+  document.getElementById("anio").value = "2026";
+  document.getElementById("tipoDec").value = "IND";
+  document.getElementById("tipoIdent").value = "R";
+  document.querySelector("#tablaDinero tbody").innerHTML = "";
+  document.querySelector("#tablaVehiculos tbody").innerHTML = "";
+  document.querySelector("#tablaInmuebles tbody").innerHTML = "";
+  document.querySelector("#tablaPasivos tbody").innerHTML = "";
+  document.getElementById("preview").value = "";
+}
+
+// filas iniciales vacías
+agregarDinero();
+agregarVehiculo();
+agregarInmueble();
+agregarPasivo();
+</script>
+</body>
+</html>
